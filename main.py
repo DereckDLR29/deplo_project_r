@@ -7,7 +7,6 @@ MENU_OPTIONS = (
     (6, "Generate Final Report"),
     (0, "Exit"),
 )
-
 def display_menu(menu_options: tuple) -> None:
     
     print("\n" + "=" * 45)
