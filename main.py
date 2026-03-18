@@ -8,18 +8,8 @@ MENU_OPTIONS = (
     (0, "Exit"),
 )
 
-
 def display_menu(menu_options: tuple) -> None:
-    """
-    Displays the main menu options to the user.
-
-    Parameters:
-        menu_options (tuple): A tuple of (option_number, label) pairs
-                              representing the available menu options.
-
-    Returns:
-        None
-    """
+    
     print("\n" + "=" * 45)
     print("   CUSTOMER ORDER MANAGEMENT SYSTEM")
     print("=" * 45)
@@ -35,18 +25,8 @@ def display_menu(menu_options: tuple) -> None:
 
     print("=" * 45)
 
-
 def get_menu_choice(menu_options: tuple) -> int:
-    """
-    Prompts the user to enter a menu option and validates the input.
-
-    Parameters:
-        menu_options (tuple): A tuple of (option_number, label) pairs
-                              used to validate the user's choice.
-
-    Returns:
-        int: A valid menu option number chosen by the user.
-    """
+    
     # Build a tuple of valid option numbers for validation
     valid_options = tuple(option[0] for option in menu_options)
 
@@ -62,21 +42,8 @@ def get_menu_choice(menu_options: tuple) -> int:
         except ValueError:
             print("  ⚠  Please enter a valid number.")
 
-
 def route_menu_choice(choice: int, clients: dict, products: dict, orders: dict) -> dict:
-    """
-    Routes the user's menu choice to the corresponding module function.
-
-    Parameters:
-        choice   (int):  The menu option selected by the user.
-        clients  (dict): Shared dictionary of registered clients.
-        products (dict): Shared dictionary of registered products.
-        orders   (dict): Shared dictionary of registered orders.
-
-    Returns:
-        dict: A status dictionary with key 'success' (bool).
-    """
-
+   
     if choice == 1:
         # ── Call register_client from clients module ──────────────────
         print("\n  ── Register Client ──")
@@ -111,22 +78,7 @@ def route_menu_choice(choice: int, clients: dict, products: dict, orders: dict) 
 
 
 def run_menu() -> None:
-    """
-    Main entry point for the Customer Order Management System.
-    Initializes shared data stores and keeps the menu running
-    until the user chooses to exit.
 
-    Parameters:
-        None
-
-    Returns:
-        None
-    """
-
-    # Shared data stores — passed by reference to each module function
-    # clients  → dict  { client_id: { "name": ..., "email": ... } }
-    # products → dict  { product_id: (product_id, product_name, unit_price) }
-    # orders   → dict  { order_id: { "client_id", "product_id", "quantity", "total" } }
     clients : dict = {}
     products: dict = {}
     orders  : dict = {}
@@ -144,9 +96,5 @@ def run_menu() -> None:
         # Dicts are passed by reference — changes inside modules persist
         route_menu_choice(choice, clients, products, orders)
 
-
-# ─────────────────────────────────────────────
-# Entry point
-# ─────────────────────────────────────────────
 if __name__ == "__main__":
     run_menu()
