@@ -1,99 +1,86 @@
-MENU_OPTIONS = (
-    (1, "Register Client"),
-    (2, "Register Product"),
-    (3, "Create Order"),
-    (4, "View Registered Orders"),
-    (5, "Calculate Daily Revenue"),
-    (6, "Generate Final Report"),
-    (0, "Exit"),
-)
-def display_menu(menu_options: tuple) -> None:
-    
-    print("\n" + "=" * 45)
-    print("   CUSTOMER ORDER MANAGEMENT SYSTEM")
-    print("=" * 45)
-
-    for option in menu_options:
-        option_number = option[0]
-        option_label  = option[1]
-
-        if option_number == 0:
-            print("-" * 45)
-
-        print(f"  [{option_number}]  {option_label}")
-
-    print("=" * 45)
-
-def get_menu_choice(menu_options: tuple) -> int:
-    
-    # Build a tuple of valid option numbers for validation
-    valid_options = tuple(option[0] for option in menu_options)
-
+from datetime import datetime as dt
+import random
+import re
+users= {}
+orders= {}
+products= {}
+see= ("Name:", "Unit price:")
+option= True
+def register_client(f_users, f_id, f_fullname, f_email):
     while True:
         try:
-            choice = int(input("\n  Enter an option: "))
-
-            if choice in valid_options:
-                return choice
+            if f_id in users and f_fullname in users and f_email in users:
+                print("Any user information already registered in another one.")
+            if f_fullname.isalpha() and "@" in f_email and "." in f_email:
+                print("Name and email registered succesfully.")
+                data= (f_fullname, f_email)
+                users[f_id]= data
+                break
             else:
-                print(f"  ⚠  Invalid option. Please choose from: {valid_options}")
+                raise ValueError
+        except:
+            print("Please enter a valid email")
+    print("\nCurrent users by ID")
+    for user in users:
+        print(user)
 
-        except ValueError:
-            print("  ⚠  Please enter a valid number.")
-
-def route_menu_choice(choice: int, clients: dict, products: dict, orders: dict) -> dict:
-   
-    if choice == 1:
-        # ── Call register_client from clients module ──────────────────
-        print("\n  ── Register Client ──")
-        # register_client(clients)
-
-    elif choice == 2:
-        # ── Call register_product from products module ─────────────────
-        print("\n  ── Register Product ──")
-        # register_product(products)
-
-    elif choice == 3:
-        # ── Call create_order from orders module ──────────────────────
-        print("\n  ── Create Order ──")
-        # create_order(orders, clients, products)
-
-    elif choice == 4:
-        # ── Call display_orders from queries module ────────────────────
-        print("\n  ── View Registered Orders ──")
-        # display_orders(orders, clients, products)
-
-    elif choice == 5:
-        # ── Call calculate_daily_revenue from revenue module ───────────
-        print("\n  ── Calculate Daily Revenue ──")
-        # calculate_daily_revenue(orders)
-
-    elif choice == 6:
-        # ── Call generate_final_report from reports module ─────────────
-        print("\n  ── Generate Final Report ──")
-        # generate_final_report(orders, clients, products)
-
-    return {"success": True}
-
-
-def run_menu() -> None:
-
-    clients : dict = {}
-    products: dict = {}
-    orders  : dict = {}
-
-    print("\n  Welcome to the Customer Order Management System")
-
+def register_product(f_products, fp_name, f_price, f_see, f_idproduct):
     while True:
-        display_menu(MENU_OPTIONS)
-        choice = get_menu_choice(MENU_OPTIONS)
-
-        if choice == 0:
-            print("\n  Goodbye! Session ended.\n")
+        if f_idproduct not in f_products:
             break
+        else:
+            print("Validating the system, we found this number already exists. Generating another one, please wait a moment...")
 
-        # Dicts are passed by reference — changes inside modules persist
-        route_menu_choice(choice, clients, products, orders)
+    new_product = (fp_name, f_price)
+    f_products[f_idproduct] = new_product
+    print(f"Product saved!\nCurrent products")
+    for product, properties in f_products.items():
+        print("ID:", product)
+        for property, show in zip(properties, f_see):
+            print(show, property)
+        print("-"*40)
+    
+def create_order(f_users, f_products, f_orders):
+    pass
 
-if __name__ == "__main__":
-    run_menu()
+def check_orders(f_users, f_products, f_orders):
+    pass
+
+def calculate_revenues(f_products, f_orders):
+    pass
+
+def final_report(f_products, f_orders):
+    pass
+
+while option != 7:
+    try:
+        option = int(input("Select any function\n 1) Client register\n 2) Product register \n 3) Create order\n 4) Check orders\n 5) Calculate revenues\n 6) Generate report\n 7) Exit\n>> "))
+        if option not in range(1, 8):
+            raise ValueError
+    except ValueError:
+        print("Invalid option, please select a valid one.")
+        continue
+    if option== 1:
+        id= random.randint(10000, 50000)
+        fullname= input("Please enter your full name: ").upper()
+        email= input("Please enter your email: ").lower()
+        register_client(users, id, fullname, email)
+    elif option== 2:
+        id_product = random.randint(1000, 2000) 
+        name= input("Product name: ")
+        try:
+            price= float(input("Price: "))
+            register_product(products, name, price, see, id_product)
+        except:
+            print("Invalid price")
+    elif option== 3:
+        create_order(users, products, orders)
+    elif option== 4:
+        check_orders(users, products, orders, see)
+    elif option== 5:
+        calculate_revenues(products, orders)
+    elif option== 6:
+        final_report(products, orders)
+    elif option== 7:
+        print("Thanks for use our services!")
+        
