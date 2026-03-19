@@ -122,11 +122,11 @@ def check_orders(f_orders):
     Plus, returns the number of finished orders.
     """
     if not f_orders:
-        print("\nNo hay órdenes registradas actualmente.")
+        print("\nNo orders registered yet.")
         return
 
     print("\n" + "="*50)
-    print("REVISIÓN DE ÓRDENES".center(50))
+    print("ORDERS REVIEW".center(50))
     print("="*50)
     
     orders_quantity= 0
@@ -134,12 +134,36 @@ def check_orders(f_orders):
     for order_id, data in f_orders.items():
         orders_quantity+= 1
         cliente, prod, precio, cant, total, fecha = data
-        print(f"Orden ID: {order_id} | Fecha: {fecha} \nCliente: {cliente}\nProducto: {prod} (Cant: {cant})\nTotal de la venta: ${total:.2f}")
+        print(f"ID: {order_id} | Fecha: {fecha} \nCliente: {cliente}\nProducto: {prod} \nQuantity: {cant})\nTotal order: ${total:.2f}")
         print("-" * 50)
-        print(f"\nSe han revisado un total de {orders_quantity} órdenes.")
+        print(f"\nA total of {orders_quantity} have been reviewed.")
     return orders_quantity
 
-def calculate_revenues(f_products, f_orders):
+def calculate_revenues(f_orders):
+    """
+    Calculates the total daily income by summing all registered orders.
+    
+    This function was developed collaboratively:
+    - Person 1: Basic sum logic
+    - Person 2: Main function with validation and return value
+    
+    Args:
+        f_orders (dict): Dictionary containing all orders 
+                        (order_id -> (client_name, product_name, unit_price, quantity, total, date))
+    
+    Returns:
+        float: Total daily income (sum of all order totals)
+               Returns 0.0 if there are no orders.
+    """
+    if not f_orders:
+        return 0.0
+    
+    total_income = 0.0
+    for order_data in f_orders.values():
+        total_income += order_data[4]   # index 4 = total of the order
+    
+    return total_income
+def calculate_revenues(f_orders):
     """
     Calculates the total daily income by summing all registered orders.
     
