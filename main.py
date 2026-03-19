@@ -41,7 +41,83 @@ def register_product(f_products, fp_name, f_price, f_see, f_idproduct):
         print("-"*40)
     
 def create_order(f_users, f_products, f_orders):
-    pass
+    """
+    Creates a new order associating one client, one product and quantity.
+    Returns the new order ID if successful, otherwise returns None.
+    """
+    if not f_users:
+        print("There are no registered customers yet")
+        print("Try at least registering one customer")
+        return 
+    if not f_products:
+        print("There are no products registered yet")
+        print("Try at least registering one product")
+        return
+    
+    print("Registered customers: ")
+    
+    for fid, (name, email) in f_users.items():
+        print(f" ID: {fid} | Name: {name.title()} | Email: {email}")
+        
+    while True:
+        try:
+            client_id = int(input("Enter customer ID: "))
+            if client_id in f_users:
+                break
+            print("Customer not found. Try again.")
+        except ValueError:
+            print("Please enter a valid number.")
+    
+    print("Available products: ")
+    
+    for fid, (name, price) in f_products.items():
+        print(f"  ID: {fid} | Name: {name} | Price: ${price:.2f}")
+        
+    while True:
+        try:
+            prod_id = int(input("Enter product ID: "))
+            if prod_id in f_products:
+                break
+            print("Product not found. Try again.")
+        except ValueError:
+            print("Please enter a valid number.")
+    
+    while True:
+        try:
+            quantity = int(input("Enter quantity: "))
+            if quantity > 0:
+                break
+            print("Quantity must be greater than 0.")
+        except ValueError:
+            print("Please enter a valid number.")
+      
+    product_name = f_products[prod_id][0]
+    unit_price = f_products[prod_id][1]
+    total = unit_price * quantity
+    
+    if f_orders:
+        order_id = max(f_orders.keys()) + 1
+    else:
+        order_id = 10001
+        order_tuple = (
+        f_users[client_id][0],   
+        product_name,            
+        unit_price,              
+        quantity,                
+        total,                   
+        dt.now().strftime("%Y-%m-%d %H:%M")  
+    )
+    
+    f_orders[order_id] = order_tuple
+    
+    print(f"Order created successfully!")
+    print(f"Order ID: {order_id}")
+    print(f"Client: {f_users[client_id][0]}")
+    print(f"Product: {product_name}")
+    print(f"Quantity: {quantity}")
+    print(f"Total: ${total:.2f}")
+    
+    return order_id
 
 def check_orders(f_users, f_products, f_orders):
     pass
@@ -72,9 +148,11 @@ while option != 7:
             price= float(input("Price: "))
             register_product(products, name, price, see, id_product)
         except:
-            print("Invalid price")
+            print("Invalid price.")
     elif option== 3:
-        create_order(users, products, orders)
+        new_id = create_order(users, products, orders)
+        if new_id is not None:
+            print(f"Order #{new_id} was created.")
     elif option== 4:
         check_orders(users, products, orders, see)
     elif option== 5:
