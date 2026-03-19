@@ -6,30 +6,38 @@ orders= {}
 products= {}
 see= ("Name:", "Unit price:")
 option= True
-def register_client(f_users, f_id, f_fullname, f_email):
-    while True:
-        try:
-            if f_id in users and f_fullname in users and f_email in users:
-                print("Any user information already registered in another one.")
-            if f_fullname.isalpha() and "@" in f_email and "." in f_email:
-                print("Name and email registered succesfully.")
-                data= (f_fullname, f_email)
-                users[f_id]= data
-                break
-            else:
-                raise ValueError
-        except:
-            print("Please enter a valid email")
+def register_client(f_users, f_id, f_name, f_lastname, f_email):
+    """
+    Creates a user within an ID and email, using both name and lastname to create username.
+    A username and email validation that allow registration if there's any @ and a dot in the last one.
+    Plus, show registered users list printing current users by ID.
+    """
+    try:
+        if f_id in users and fullname in users and f_email in users:
+            print("Any user information already registered in another one.")
+        if f_name.isalpha() and f_lastname.isalpha() and "@" in f_email and "." in f_email:
+            fullname= f_name + " " + f_lastname
+            print("Name and email registered succesfully.")
+            data= (fullname, f_email)
+            users[f_id]= data
+        else:
+            raise ValueError
+    except:
+        print("Please enter a valid email")
     print("\nCurrent users by ID")
-    for user in users:
+    for user in f_users:
         print(user)
+    if fullname and f_email is True:
+        return f_id, data
+    
 
 def register_product(f_products, fp_name, f_price, f_see, f_idproduct):
-    while True:
-        if f_idproduct not in f_products:
-            break
-        else:
-            print("Validating the system, we found this number already exists. Generating another one, please wait a moment...")
+    """
+    This option request product name and unit price, generating a random ID for this product and adding it in available products dictionary.
+    There's a option to see current product list, showing IDs, name and unit price previously defined.
+    """
+    if f_idproduct in f_products:
+        print("Validating the system, we found this number already exists. Generating another one, please wait a moment...")
 
     new_product = (fp_name, f_price)
     f_products[f_idproduct] = new_product
@@ -39,49 +47,43 @@ def register_product(f_products, fp_name, f_price, f_see, f_idproduct):
         for property, show in zip(properties, f_see):
             print(show, property)
         print("-"*40)
+    if f_idproduct and new_product is True:
+        return f_idproduct, new_product 
     
-def create_order(f_users, f_products, f_orders):
+def validate_things(dictionary, message):
+    while True:
+        try:
+            variable_id = int(input(f"Enter {message} ID: "))
+            if variable_id in dictionary:
+                return variable_id
+            else:
+                print(f"{message} not found. Try again.")
+        except ValueError:
+            print("Please enter a valid number.")
+
+def create_order(f_users, f_products, f_orders, client_id, product_id):
     """
     Creates a new order associating one client, one product and quantity.
     Returns the new order ID if successful, otherwise returns None.
     """
-    if not f_users:
-        print("There are no registered customers yet")
-        print("Try at least registering one customer")
+    if client_id not in f_users:
+        print("There are no registered customers yet. Try at least registering someone")
         return 
-    if not f_products:
-        print("There are no products registered yet")
-        print("Try at least registering one product")
+    if product_id not in f_products:
+        print("There are no products registered yet. Try at least registering one product")
         return
     
-    print("Registered customers: ")
     
+    print("Registered customers: ")
     for fid, (name, email) in f_users.items():
         print(f" ID: {fid} | Name: {name.title()} | Email: {email}")
-        
-    while True:
-        try:
-            client_id = int(input("Enter customer ID: "))
-            if client_id in f_users:
-                break
-            print("Customer not found. Try again.")
-        except ValueError:
-            print("Please enter a valid number.")
-    
+
+
     print("Available products: ")
-    
+
     for fid, (name, price) in f_products.items():
-        print(f"  ID: {fid} | Name: {name} | Price: ${price:.2f}")
-        
-    while True:
-        try:
-            prod_id = int(input("Enter product ID: "))
-            if prod_id in f_products:
-                break
-            print("Product not found. Try again.")
-        except ValueError:
-            print("Please enter a valid number.")
-    
+        print(f" ID: {fid} | Name: {name} | Price: ${price:.2f}")
+
     while True:
         try:
             quantity = int(input("Enter quantity: "))
@@ -91,15 +93,15 @@ def create_order(f_users, f_products, f_orders):
         except ValueError:
             print("Please enter a valid number.")
       
-    product_name = f_products[prod_id][0]
-    unit_price = f_products[prod_id][1]
+    product_name = f_products[product_id][0]
+    unit_price = f_products[product_id][1]
     total = unit_price * quantity
     
     if f_orders:
         order_id = max(f_orders.keys()) + 1
     else:
-        order_id = 10001
-        order_tuple = (
+        order_id = random.randint(100000, 200000)
+    order_tuple = (
         f_users[client_id][0],   
         product_name,            
         unit_price,              
@@ -110,37 +112,75 @@ def create_order(f_users, f_products, f_orders):
     
     f_orders[order_id] = order_tuple
     
-    print(f"Order created successfully!")
-    print(f"Order ID: {order_id}")
-    print(f"Client: {f_users[client_id][0]}")
-    print(f"Product: {product_name}")
-    print(f"Quantity: {quantity}")
-    print(f"Total: ${total:.2f}")
+    print(f"Order created successfully!\nOrder ID: {order_id}\nClient: {f_users[client_id][0]}\nProduct: {product_name}\nQuantity: {quantity}\nTotal: ${total:.2f}")
     
     return order_id
 
-def check_orders(f_users, f_products, f_orders):
-    pass
+def check_orders(f_orders):
+    """
+    Iterates in orders dictionary to print orders recorded in system.
+    Plus, returns the number of finished orders.
+    """
+    if not f_orders:
+        print("\nNo hay órdenes registradas actualmente.")
+        return
+
+    print("\n" + "="*50)
+    print("REVISIÓN DE ÓRDENES".center(50))
+    print("="*50)
+    
+    orders_quantity= 0
+    
+    for order_id, data in f_orders.items():
+        orders_quantity+= 1
+        cliente, prod, precio, cant, total, fecha = data
+        print(f"Orden ID: {order_id} | Fecha: {fecha} \nCliente: {cliente}\nProducto: {prod} (Cant: {cant})\nTotal de la venta: ${total:.2f}")
+        print("-" * 50)
+        print(f"\nSe han revisado un total de {orders_quantity} órdenes.")
+    return orders_quantity
 
 def calculate_revenues(f_products, f_orders):
-    pass
+    """
+    Calculates the total daily income by summing all registered orders.
+    
+    This function was developed collaboratively:
+    - Person 1: Basic sum logic
+    - Person 2: Main function with validation and return value
+    
+    Args:
+        f_orders (dict): Dictionary containing all orders 
+                        (order_id -> (client_name, product_name, unit_price, quantity, total, date))
+    
+    Returns:
+        float: Total daily income (sum of all order totals)
+               Returns 0.0 if there are no orders.
+    """
+    if not f_orders:
+        return 0.0
+    
+    total_income = 0.0
+    for order_data in f_orders.values():
+        total_income += order_data[4]   # index 4 = total of the order
+    
+    return total_income
 
 def final_report(f_products, f_orders):
     pass
 
-while option != 7:
+while option != 8:
     try:
-        option = int(input("Select any function\n 1) Client register\n 2) Product register \n 3) Create order\n 4) Check orders\n 5) Calculate revenues\n 6) Generate report\n 7) Exit\n>> "))
-        if option not in range(1, 8):
+        option = int(input("Select any function\n 1) Client register\n 2) Product register\n 3) Validate inputs\n 4) Create order\n 5) Check orders\n 6) Calculate revenues\n 7) Generate report\n 8) Exit\n>> "))
+        if option not in range(1, 9):
             raise ValueError
     except ValueError:
         print("Invalid option, please select a valid one.")
         continue
     if option== 1:
         id= random.randint(10000, 50000)
-        fullname= input("Please enter your full name: ").upper()
+        name= input("Please enter your name: ").capitalize()
+        lastname= input("Please enter your lastname: ").capitalize()
         email= input("Please enter your email: ").lower()
-        register_client(users, id, fullname, email)
+        register_client(users, id, name, lastname, email)
     elif option== 2:
         id_product = random.randint(1000, 2000) 
         name= input("Product name: ")
@@ -150,15 +190,17 @@ while option != 7:
         except:
             print("Invalid price.")
     elif option== 3:
-        new_id = create_order(users, products, orders)
-        if new_id is not None:
-            print(f"Order #{new_id} was created.")
+        client_id= validate_things(users, "Client")
+        product_id= validate_things(products, "Product")
     elif option== 4:
-        check_orders(users, products, orders, see)
+        new_id = create_order(users, products, orders, client_id, product_id)
+        if new_id:
+            print(f"Order #{new_id} was created.")
     elif option== 5:
-        calculate_revenues(products, orders)
+        check_orders(orders)
     elif option== 6:
-        final_report(products, orders)
+        calculate_revenues(products, orders)
     elif option== 7:
+        final_report(products, orders)
+    elif option== 8:
         print("Thanks for use our services!")
-        
