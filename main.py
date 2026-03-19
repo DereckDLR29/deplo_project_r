@@ -122,8 +122,30 @@ def create_order(f_users, f_products, f_orders):
 def check_orders(f_users, f_products, f_orders):
     pass
 
-def calculate_revenues(f_products, f_orders):
-    pass
+def calculate_revenues(f_orders):
+    """
+    Calculates the total daily income by summing all registered orders.
+    
+    This function was developed collaboratively:
+    - Person 1: Basic sum logic
+    - Person 2: Main function with validation and return value
+    
+    Args:
+        f_orders (dict): Dictionary containing all orders 
+                        (order_id -> (client_name, product_name, unit_price, quantity, total, date))
+    
+    Returns:
+        float: Total daily income (sum of all order totals)
+               Returns 0.0 if there are no orders.
+    """
+    if not f_orders:
+        return 0.0
+    
+    total_income = 0.0
+    for order_data in f_orders.values():
+        total_income += order_data[4]   # index 4 = total of the order
+    
+    return total_income
 
 def final_report(f_products, f_orders):
     pass
@@ -155,8 +177,18 @@ while option != 7:
             print(f"Order #{new_id} was created.")
     elif option== 4:
         check_orders(users, products, orders, see)
-    elif option== 5:
-        calculate_revenues(products, orders)
+   
+    elif option == 5:
+        total = calculate_revenues(orders)
+        
+        print("\n" + "=" * 50)
+        print("     DAILY INCOME CALCULATION")
+        print("=" * 50)
+        if total == 0.0:
+            print("No orders registered yet.")
+        else:
+            print(f"Total income generated today: ${total:.2f}")
+        print("=" * 50)
     elif option== 6:
         final_report(products, orders)
     elif option== 7:
