@@ -136,7 +136,7 @@ def check_orders(f_orders):
         cliente, prod, precio, cant, total, fecha = data
         print(f"ID: {order_id} | Fecha: {fecha} \nCliente: {cliente}\nProducto: {prod} \nQuantity: {cant})\nTotal order: ${total:.2f}")
         print("-" * 50)
-        print(f"\nA total of {orders_quantity} have been reviewed.")
+        print(f"\nA total of {orders_quantity} orders have been reviewed.")
     return orders_quantity
 
 def calculate_revenues(f_orders):
@@ -163,33 +163,28 @@ def calculate_revenues(f_orders):
         total_income += order_data[4]   # index 4 = total of the order
     
     return total_income
-def calculate_revenues(f_orders):
-    """
-    Calculates the total daily income by summing all registered orders.
-    
-    This function was developed collaboratively:
-    - Person 1: Basic sum logic
-    - Person 2: Main function with validation and return value
-    
-    Args:
-        f_orders (dict): Dictionary containing all orders 
-                        (order_id -> (client_name, product_name, unit_price, quantity, total, date))
-    
-    Returns:
-        float: Total daily income (sum of all order totals)
-               Returns 0.0 if there are no orders.
-    """
-    if not f_orders:
-        return 0.0
-    
-    total_income = 0.0
-    for order_data in f_orders.values():
-        total_income += order_data[4]   # index 4 = total of the order
-    
-    return total_income
 
-def final_report(f_products, f_orders):
-    pass
+def final_report(f_orders, report_date):
+    """
+    This function uses datetime module to print day of weekend in report.
+    Defines properties in all orders values to iterate these dictionary and
+    show final revenue adding total per order to this value.
+    """
+    final_revenue= 0
+    if not f_orders:
+        print("There's no any orders registered!")
+    else:
+        print("Report for", report_date)
+        overall= 0
+        for order_id, properties in f_orders.items():
+            overall+= 1
+            client, product, price, quantity, total, date= properties
+            print("-" * 56, "ID:", order_id, "\nClient:", client, "/ Product", product, "/ Quantity:", quantity)
+            print(f"Total order: ${total:.2f}")
+            print("-" *56, "\nTotal orders:", overall)
+            final_revenue+= total
+        print("\nFinal revenue:", final_revenue)
+        return overall
 
 while option != 8:
     try:
@@ -223,8 +218,9 @@ while option != 8:
     elif option== 5:
         check_orders(orders)
     elif option== 6:
-        calculate_revenues(products, orders)
+        calculate_revenues(orders)
     elif option== 7:
-        final_report(products, orders)
+        current_date = dt.now().strftime("%A, %B %m")
+        final_report(orders, current_date)
     elif option== 8:
         print("Thanks for use our services!")
