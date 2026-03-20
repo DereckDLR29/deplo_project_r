@@ -12,18 +12,16 @@ def register_client(f_users, f_id, f_name, f_lastname, f_email):
     A username and email validation that allow registration if there's any @ and a dot in the last one.
     Plus, show registered users list printing current users by ID.
     """
-    try:
-        if f_id in users and fullname in users and f_email in users:
-            print("Any user information already registered in another one.")
-        if f_name.isalpha() and f_lastname.isalpha() and "@" in f_email and "." in f_email:
-            fullname= f_name + " " + f_lastname
-            print("Name and email registered succesfully.")
-            data= (fullname, f_email)
-            users[f_id]= data
-        else:
-            raise ValueError
-    except:
-        print("Please enter a valid email")
+    if f_id in users and fullname in users and f_email in users:
+        print("Any user information already registered in another one.")
+    if f_name.isalpha() and f_lastname.isalpha() and "@" in f_email and "." in f_email:
+        fullname= f_name + " " + f_lastname
+        print("Name and email registered succesfully.")
+        data= (fullname, f_email)          
+        users[f_id]= data
+    else:
+        print("Theres invalid values, please try it again")
+        
     print("\nCurrent users by ID")
     for user in f_users:
         print(user)
@@ -37,10 +35,9 @@ def register_product(f_products, fp_name, f_price, f_see, f_idproduct):
     There's a option to see current product list, showing IDs, name and unit price previously defined.
     """
     if f_idproduct in f_products:
-        print("Validating the system, we found this number already exists. Generating another one, please wait a moment...")
-
-    new_product = (fp_name, f_price)
-    f_products[f_idproduct] = new_product
+        print("Validating the system, we found this number already exists, Generating another one, please wait a moment...")
+    new_product= (fp_name, f_price)
+    f_products[f_idproduct]= new_product
     print(f"Product saved!\nCurrent products")
     for product, properties in f_products.items():
         print("ID:", product)
@@ -48,7 +45,7 @@ def register_product(f_products, fp_name, f_price, f_see, f_idproduct):
             print(show, property)
         print("-"*40)
     if f_idproduct and new_product is True:
-        return f_idproduct, new_product 
+        return f_idproduct, new_product
     
 def validate_things(dictionary, message):
     while True:
@@ -196,10 +193,13 @@ while option != 8:
         continue
     if option== 1:
         id= random.randint(10000, 50000)
-        name= input("Please enter your name: ").capitalize()
-        lastname= input("Please enter your lastname: ").capitalize()
-        email= input("Please enter your email: ").lower()
-        register_client(users, id, name, lastname, email)
+        try:
+            name= input("Please enter your name: ").capitalize()
+            lastname= input("Please enter your lastname: ").capitalize()
+            email= input("Please enter your email: ").lower()
+            register_client(users, id, name, lastname, email)
+        except:
+            print("Uh")
     elif option== 2:
         id_product = random.randint(1000, 2000) 
         name= input("Product name: ")
