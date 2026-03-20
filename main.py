@@ -17,7 +17,7 @@ def register_client(f_users, f_id, f_name, f_lastname, f_email):
     if f_id in users and fullname in users and f_email in users:  # fullname is referenced before assignment → potential crash
         print("Any user information already registered in another one.")
 
-    if f_name.isalpha() and f_lastname.isalpha() and "@" in f_email and "." in f_email:  # Only checks structure, not real email validity
+    if "@" in f_email and "." in f_email:  # Only checks structure, not real email validity
         fullname= f_name + " " + f_lastname  # Concatenation to create display name
         print("Name and email registered succesfully.")
         data= (fullname, f_email)          
@@ -114,7 +114,7 @@ def create_order(f_users, f_products, f_orders, client_id, product_id):
     total = unit_price * quantity  # Basic calculation
     
     if f_orders:
-        order_id = max(f_orders.keys())  # ⚠️ This will overwrite last order (no +1)
+        order_id = max(f_orders.keys())
     else:
         order_id = random.randint(100000, 200000)
 
