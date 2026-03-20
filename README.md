@@ -24,11 +24,11 @@ The system uses:
 **Dictionaries:** Used for storing and retrieving registered clients and orders due to their key-value efficiency.
 **Tuples:** Used for representing inmutable products informartion, such as (product_id, product_name, unit_price)
 
-## Funtional Features
-The application includes six main funtionalities developed collaboratively:
+## Functional Features
+The application includes seven main functionalities developed collaboratively:
 1. **Client  Registration:** Store ID, name and emails.
 2. **Product Registration:** Store product details in tuples.
-3. **Imputs validation:** Funtion added validate the user and product ID to buy.
+3. **Inputs validation:** Function added validate the user and product ID to buy.
 4. **Order creation:** Associate clients with products and quantities.
 5. **Order query:** Visualize all registered orders with detailed totals.
 6. **Daily income calculation:** Sum of all orders processed during the session.
