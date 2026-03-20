@@ -153,9 +153,9 @@ def check_orders(f_orders):
     for order_id, data in f_orders.items():
         orders_quantity+= 1
 
-        cliente, prod, unit_price, cant, total, fecha = data  # Must match tuple structure exactly
+        client, prod, unit_price, cant, total, date = data  # Must match tuple structure exactly
 
-        print(f"ID: {order_id} | Fecha: {fecha} \nCliente: {cliente}\nProducto: {prod} \nQuantity: {cant}\nTotal order: ${total:.2f}")
+        print(f"ID: {order_id} | Date: {date} \nClient: {client}\nProduct: {prod} \nQuantity: {cant}\nTotal order: ${total:.2f}")
         print("-" * 50)
 
         print(f"\nA total of {orders_quantity} orders have been reviewed.")  # Printed every loop iteration
