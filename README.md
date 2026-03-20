@@ -28,10 +28,11 @@ The system uses:
 The application includes six main funtionalities developed collaboratively:
 1. **Client  Registration:** Store ID, name and emails.
 2. **Product Registration:** Store product details in tuples.
-3. **Order creation:** Associate clients with products and quantities.
-4. **Order query:** Visualize all registered orders with detailed totals.
-5. **Daily income calculation:** Sum of all orders processed during the session.
-6. **Final report generation:** Summary of total orders, total revenue, orders  per client, and products sold.
+3. **Imputs validation:** Funtion added validate the user and product ID to buy.
+4. **Order creation:** Associate clients with products and quantities.
+5. **Order query:** Visualize all registered orders with detailed totals.
+6. **Daily income calculation:** Sum of all orders processed during the session.
+7. **Final report generation:** Summary of total orders, total revenue, orders  per client, and products sold.
 
 ## How to run the program
 1. Ensure you have **Python3** installed.
