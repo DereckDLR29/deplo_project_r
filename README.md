@@ -6,7 +6,7 @@ This project is a Python-based automation tool designed for a distribution compa
 It transitions manual spreadsheet or paper based records into a structured digital system that registers clients, products and orders, while automatically calculating totals and generating daily sales reports.
 
 ## System Architecture
-The system follows a **modular architecture** where each business functionality is isolated into specific modules to ensure reusability and maintainability.
+The system follows a **monolithic architecture** where each business functionality is isolated into specific modules to ensure reusability and maintainability.
 
 It operates via a terminal based interface.
 
