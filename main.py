@@ -27,7 +27,6 @@ def register_client(f_users, f_id, f_name, f_lastname, f_email):
         print(user)
     if fullname and f_email is True:
         return f_id, data
-    
 
 def register_product(f_products, fp_name, f_price, f_see, f_idproduct):
     """
@@ -70,11 +69,9 @@ def create_order(f_users, f_products, f_orders, client_id, product_id):
         print("There are no products registered yet. Try at least registering one product")
         return
     
-    
     print("Registered customers: ")
     for fid, (name, email) in f_users.items():
         print(f" ID: {fid} | Name: {name.title()} | Email: {email}")
-
 
     print("Available products: ")
 
@@ -218,7 +215,15 @@ while option != 8:
     elif option== 5:
         check_orders(orders)
     elif option== 6:
-        calculate_revenues(orders)
+        total = calculate_revenues(orders)
+        print("\n" + "=" * 50)
+        print("     DAILY INCOME CALCULATION")
+        print("=" * 50)
+        if total == 0.0:
+            print("No orders registered yet.")
+        else:
+            print(f"Total income generated today: ${total:.2f}")
+        print("=" * 50)
     elif option== 7:
         current_date = dt.now().strftime("%A, %B %m")
         final_report(orders, current_date)
